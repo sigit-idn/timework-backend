@@ -4,7 +4,7 @@
   "description": "Work management",
   "main": "index.js",
   "scripts": {
-    "start": "node api/index"
+    "start": "node pages/api/index"
   },
   "author": "Sigit Tri Nugroho",
   "license": "ISC",
