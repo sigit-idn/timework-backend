@@ -10,7 +10,7 @@ const {
   finishReport,
   editTaskReport,
   addTaskReport,
-} = require("../controllers/Report");
+} = require("../controllers/report");
 
 const router = require("express")();
 
