@@ -33,6 +33,7 @@ app.use("/v1/report", reportRouter);
 app.use("/v1/company", companyRouter);
 
 app.get("/notifications", (req, res) => {
+  console.log(req);
   res.writeHead(200, {
     connection: "keep-alive",
     "cache-control": "no-cache",
