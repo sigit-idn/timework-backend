@@ -15,7 +15,6 @@ const connectDb = require("./src/config/db");
 const sendNotification = require("./src/utils/sendNotification");
 const session = require("express-session");
 const notifications = require("./src/utils/notifications");
-const { authorize } = require("./src/utils/authorization");
 const { verify } = require("jsonwebtoken");
 
 connectDb();
@@ -33,7 +32,6 @@ app.use("/v1/report", reportRouter);
 app.use("/v1/company", companyRouter);
 
 app.get("/notifications", (req, res) => {
-  console.log(req);
   res.writeHead(200, {
     connection: "keep-alive",
     "cache-control": "no-cache",

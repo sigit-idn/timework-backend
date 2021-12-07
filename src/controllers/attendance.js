@@ -3,7 +3,10 @@ const Employee = require("../models/employee");
 
 exports.getAttendances = async (req, res) => {
   try {
-    const employee = await Employee.findById(res.locals._id, "attendances");
+    const employee = await Employee.findById(
+      req.query.userId ?? res.locals._id,
+      "attendances"
+    );
     const data = employee.attendances.filter(
       ({ date }) =>
         new Date(date).getFullYear() ===

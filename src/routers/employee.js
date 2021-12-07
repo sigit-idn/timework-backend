@@ -23,8 +23,8 @@ router.post(
 );
 
 router.get("/", authorize("employee"), getEmployees);
-router.get("/:id", authorize("employee"), getEmployee);
-router.put("/:id", authorize("employee"), editEmployee);
+router.get("/:id", authorize("admin"), getEmployee);
+router.put("/:id", authorize("admin"), editEmployee);
 router.delete("/:id", authorize("admin"), deleteEmployee);
 
 module.exports = router;

@@ -1,14 +1,17 @@
 const Employee = require("../models/employee");
 
 exports.getReports = async (req, res) => {
+  const { month, userId } = req.query;
   try {
-    const employee = await Employee.findById(res.locals._id, "reports");
+    const employee = await Employee.findById(
+      userId ?? res.locals._id,
+      "reports"
+    );
     const data = employee.reports.filter(
       ({ date }) =>
         new Date(date).getFullYear() ===
-          new Date(req.query.month ?? new Date()).getFullYear() &&
-        new Date(date).getMonth() ===
-          new Date(req.query.month ?? new Date()).getMonth()
+          new Date(month ?? new Date()).getFullYear() &&
+        new Date(date).getMonth() === new Date(month ?? new Date()).getMonth()
     );
 
     res.status(200).json({

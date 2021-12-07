@@ -29,17 +29,24 @@ exports.addEmployee = async (req, res) => {
 
 exports.getEmployees = async (_, res) => {
   const { company } = res.locals;
-  Employee.find(
-    { company },
-    ["name", "role", "position", "tasks"],
-    (err, data) => {
-      if (err) return res.status(400).send(err);
-      res.status(200).json({
-        message: "Get employees successfully",
-        data,
-      });
-    }
-  );
+  Employee.find({ company }, ["name", "position", "tasks"], (err, data) => {
+    if (err) return res.status(400).send(err);
+    data = data.map(({ name, position, tasks, _id }) => {
+      const employee = {
+        _id,
+        name,
+        position,
+        task_length: tasks.length,
+        working_task: tasks.find(({ is_working }) => is_working)?.title,
+      };
+      return employee;
+    });
+
+    res.status(200).json({
+      message: "Get employees successfully",
+      data,
+    });
+  });
 };
 
 exports.getEmployee = async (req, res) => {
@@ -52,6 +59,7 @@ exports.getEmployee = async (req, res) => {
       "email",
       "phone",
       "address",
+      "bio",
     ]),
   });
 };
@@ -65,13 +73,28 @@ exports.editEmployee = async (req, res) => {
     delete body.password;
   }
 
-  Employee.findByIdAndUpdate(req.params.id, body, (err, employee) => {
-    if (err) return res.send(err);
-    return res.json({
-      message: "Employee edited successfully",
-      data: employee,
-    });
-  });
+  Employee.findByIdAndUpdate(
+    req.params.id,
+    body,
+    {
+      projection: [
+        "name",
+        "address",
+        "email",
+        "phone",
+        "position",
+        "role",
+        "bio",
+      ],
+    },
+    (err, employee) => {
+      if (err) return res.send(err);
+      return res.json({
+        message: "Employee edited successfully",
+        data: employee,
+      });
+    }
+  );
 };
 
 exports.deleteEmployee = (req, res) => {

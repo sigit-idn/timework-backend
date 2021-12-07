@@ -19,6 +19,13 @@ exports.authorize = function (role) {
       jwt.verify(token, process.env.ACCESS_TOKEN, (err, auth) => {
         const roles = ["employee", "admin", "superadmin"];
 
+        if (
+          req.query.userId &&
+          auth._id != req.query.userId &&
+          !/admin/.test(auth.role)
+        )
+          return res.status(403).json({ message: "User Unauthorized" });
+
         if (err || roles.indexOf(auth.role) < roles.indexOf(role))
           return res.status(403).json({ message: "User Unauthorized" });
 

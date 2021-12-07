@@ -3,8 +3,12 @@
   "version": "1.0.0",
   "description": "Work management",
   "main": "index.js",
+  "engines": {
+    "node": "14.15.3"
+  },
   "scripts": {
-    "start": "node index"
+    "start": "node index",
+    "seed": "node src/seeders/seedEmployees"
   },
   "author": "Sigit Tri Nugroho",
   "license": "ISC",
