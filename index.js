@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 const attendanceRouter = require("./src/routers/attendance");
 const employeeRouter = require("./src/routers/employee");
 const companyRouter = require("./src/routers/company");
@@ -30,7 +30,7 @@ app.use("/v1/task", taskRouter);
 app.use("/v1/employee", employeeRouter);
 app.use("/v1/report", reportRouter);
 app.use("/v1/company", companyRouter);
-app.use("/", (_, res) => res.send("Welcome"));
+app.use("/", (_, res) => res.send("API SERVER RUNNING SUCCESSFULLY"));
 
 app.get("/notifications", (req, res) => {
   res.writeHead(200, {
