@@ -30,6 +30,7 @@ app.use("/v1/task", taskRouter);
 app.use("/v1/employee", employeeRouter);
 app.use("/v1/report", reportRouter);
 app.use("/v1/company", companyRouter);
+app.use("/", (_, res) => res.send("Welcome"));
 
 app.get("/notifications", (req, res) => {
   res.writeHead(200, {
