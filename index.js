@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const app = express();
-const apiPort = 3000;
+const PORT = 3000;
 const attendanceRouter = require("./src/routers/attendance");
 const employeeRouter = require("./src/routers/employee");
 const companyRouter = require("./src/routers/company");
@@ -50,4 +50,4 @@ app.get("/notifications", (req, res) => {
   });
 });
 
-app.listen(apiPort, () => console.log(`Server running on port ${apiPort}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
