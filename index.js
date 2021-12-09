@@ -12,8 +12,6 @@ const reportRouter = require("./src/routers/report");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const connectDb = require("./src/config/db");
-const sendNotification = require("./src/utils/sendNotification");
-const session = require("express-session");
 const notifications = require("./src/utils/notifications");
 const { verify } = require("jsonwebtoken");
 
@@ -30,7 +28,6 @@ app.use("/v1/task", taskRouter);
 app.use("/v1/employee", employeeRouter);
 app.use("/v1/report", reportRouter);
 app.use("/v1/company", companyRouter);
-app.use("/", (_, res) => res.send("API SERVER RUNNING SUCCESSFULLY"));
 
 app.get("/notifications", (req, res) => {
   res.writeHead(200, {
@@ -38,6 +35,8 @@ app.get("/notifications", (req, res) => {
     "cache-control": "no-cache",
     "content-Type": "text/event-stream",
   });
+
+  app.use("/", (_, res) => res.send("API SERVER RUNNING SUCCESSFULLY"));
 
   verify(req.query.auth, process.env.ACCESS_TOKEN, (_, auth) => {
     notifications.addListener((data) => {

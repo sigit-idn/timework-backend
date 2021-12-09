@@ -1,13 +1,11 @@
 const { hashSync, genSaltSync } = require("bcryptjs");
-const { internet, date, time } = require("faker");
+const { date, lorem } = require("faker");
 const faker = require("faker");
-const { cell_phone, name, title } = require("faker/lib/locales/ja");
-const { address, lorem, fake } = require("faker/locale/ja");
 const connectDb = require("../config/db");
 const Employee = require("../models/employee");
 require("dotenv").config();
 
-const seed = async () => {
+const seed = () => {
   connectDb();
 
   const employees = [];
@@ -63,12 +61,25 @@ const seed = async () => {
               "2021/11/15",
               new Date().toLocaleDateString()
             );
-            this.tasks = Array.from({ length: 10 }, () => ({
-              task_start: new Date(this.date.getTime() + 8 * 60 * 60 * 1000),
-              task_end: new Date(this.date.getTime() + 10 * 60 * 60 * 1000),
-              title: faker.lorem.words(),
-              description: faker.lorem.paragraphs(),
-            }));
+
+            let prevTaskEnd =
+              this.date.getTime() + Math.random() * 8 * 60 * 60 * 1000;
+            this.tasks = Array.from({ length: 10 }, () => {
+              const taskEnd = new Date(
+                new Date(prevTaskEnd).getTime() +
+                  Math.random() * 5 * 60 * 60 * 1000
+              );
+
+              const task = {
+                task_start: prevTaskEnd,
+                task_end: taskEnd,
+                title: faker.lorem.words(),
+                description: faker.lorem.paragraphs(),
+              };
+              prevTaskEnd = taskEnd;
+
+              return task;
+            });
             this.notes = lorem.paragraph();
           })()
       ),
@@ -82,13 +93,16 @@ const seed = async () => {
     });
   }
 
-  try {
-    await Employee.deleteMany();
-    await Employee.insertMany(employees);
-    process.exit();
-  } catch (err) {
-    console.error(err);
-  }
+  return new Promise(async (resolve, reject) => {
+    try {
+      await Employee.deleteMany();
+      await Employee.insertMany(employees);
+      resolve("Seed Employees successfully");
+      process.exit();
+    } catch (err) {
+      console.error(err);
+    }
+  });
 };
 
-seed();
+module.exports = seed();
